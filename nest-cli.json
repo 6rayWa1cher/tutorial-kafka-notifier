@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/tutorial-kafka-notifier/src",
+  "monorepo": true,
+  "root": "apps/tutorial-kafka-notifier",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/tutorial-kafka-notifier/tsconfig.app.json"
+  },
+  "projects": {
+    "tutorial-kafka-notifier": {
+      "type": "application",
+      "root": "apps/tutorial-kafka-notifier",
+      "entryFile": "main",
+      "sourceRoot": "apps/tutorial-kafka-notifier/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/tutorial-kafka-notifier/tsconfig.app.json"
+      }
+    },
+    "telegram-notifier": {
+      "type": "application",
+      "root": "apps/telegram-notifier",
+      "entryFile": "main",
+      "sourceRoot": "apps/telegram-notifier/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/telegram-notifier/tsconfig.app.json"
+      }
+    },
+    "external-stats-provider": {
+      "type": "application",
+      "root": "apps/external-stats-provider",
+      "entryFile": "main",
+      "sourceRoot": "apps/external-stats-provider/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/external-stats-provider/tsconfig.app.json"
+      }
+    },
+    "prisma": {
+      "type": "library",
+      "root": "libs/prisma",
+      "entryFile": "index",
+      "sourceRoot": "libs/prisma/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/prisma/tsconfig.lib.json"
+      }
+    },
+    "core": {
+      "type": "library",
+      "root": "libs/core",
+      "entryFile": "index",
+      "sourceRoot": "libs/core/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/core/tsconfig.lib.json"
+      }
+    }
+  }
+}

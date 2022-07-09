@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "outDir": "../../dist/apps/tutorial-kafka-notifier"
+  },
+  "include": ["src/**/*", "views/**/*"],
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+}
