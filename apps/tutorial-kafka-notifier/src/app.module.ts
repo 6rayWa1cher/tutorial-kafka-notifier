@@ -1,11 +1,10 @@
+import { AuthModule } from '@app/auth';
 import { UserModule } from '@app/core/user/user.module';
 import { PrismaModule } from '@app/prisma';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthModule } from './module/auth/auth.module';
-import { PasswordEncoderModule } from './module/password-encoder/password-encoder.module';
+import { TknAuthModule } from './module/tkn-auth/tkn-auth.module';
+import { TknUserModule } from './module/tkn-user/tkn-user.module';
 
 @Module({
   imports: [
@@ -13,9 +12,8 @@ import { PasswordEncoderModule } from './module/password-encoder/password-encode
     PrismaModule,
     UserModule,
     AuthModule,
-    PasswordEncoderModule,
+    TknAuthModule,
+    TknUserModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

@@ -3,7 +3,9 @@ import { ExternalStatsProviderService } from './external-stats-provider.service'
 
 @Controller()
 export class ExternalStatsProviderController {
-  constructor(private readonly externalStatsProviderService: ExternalStatsProviderService) {}
+  constructor(
+    private readonly externalStatsProviderService: ExternalStatsProviderService,
+  ) {}
 
   @Get()
   getHello(): string {
