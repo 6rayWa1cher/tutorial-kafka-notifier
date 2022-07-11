@@ -10,7 +10,7 @@ import helmet from 'helmet';
 import { PrismaClientExceptionFilter } from '@app/prisma/filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-const setupSwagger = (app: INestApplication) => {
+function setupSwagger(app: INestApplication) {
   const config = new DocumentBuilder()
     .setTitle('Tutorial-Kafka-Notifier')
     .setVersion('1.0')
@@ -18,7 +18,7 @@ const setupSwagger = (app: INestApplication) => {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-};
+}
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);

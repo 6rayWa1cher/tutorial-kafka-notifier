@@ -16,7 +16,7 @@ export class UserEntity {
   passwordHash: string;
 
   @ApiProperty()
-  telegramToken?: string;
+  telegramToken: string;
   @Exclude()
   telegramId?: string;
 

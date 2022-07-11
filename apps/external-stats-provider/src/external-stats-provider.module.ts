@@ -1,10 +1,17 @@
+import { UserModule } from '@app/core/user/user.module';
+import { PrismaModule } from '@app/prisma';
 import { Module } from '@nestjs/common';
-import { ExternalStatsProviderController } from './external-stats-provider.controller';
-import { ExternalStatsProviderService } from './external-stats-provider.service';
+import { ConfigModule } from '@nestjs/config';
+import { StatsModule } from './module/stats/stats.module';
+import { EspApiKeyStrategy } from './strategy';
 
 @Module({
-  imports: [],
-  controllers: [ExternalStatsProviderController],
-  providers: [ExternalStatsProviderService],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule,
+    UserModule,
+    StatsModule,
+  ],
+  providers: [EspApiKeyStrategy],
 })
 export class ExternalStatsProviderModule {}
