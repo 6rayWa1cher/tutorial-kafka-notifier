@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { map, tap } from 'rxjs';
+import { map } from 'rxjs';
 
 @Injectable()
 export class ActionsService {

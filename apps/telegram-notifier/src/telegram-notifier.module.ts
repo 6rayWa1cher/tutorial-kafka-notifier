@@ -1,10 +1,19 @@
+import { PrismaModule } from '@app/prisma';
 import { Module } from '@nestjs/common';
-import { TelegramNotifierController } from './telegram-notifier.controller';
-import { TelegramNotifierService } from './telegram-notifier.service';
+import { ConfigModule } from '@nestjs/config';
+import { MessageModule } from './module/message/message.module';
+import { SocialModule } from './module/social/social.module';
+import { TelegramModule } from './module/telegram/telegram.module';
+import { EspApiKeyStrategy } from './strategy';
 
 @Module({
-  imports: [],
-  controllers: [TelegramNotifierController],
-  providers: [TelegramNotifierService],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule,
+    TelegramModule,
+    SocialModule,
+    MessageModule,
+  ],
+  providers: [EspApiKeyStrategy],
 })
 export class TelegramNotifierModule {}
