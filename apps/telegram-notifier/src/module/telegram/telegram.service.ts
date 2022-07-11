@@ -1,15 +1,12 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectBot } from 'nestjs-telegraf';
+import { Context, Telegraf } from 'telegraf';
 
 @Injectable()
-export class TelegramService implements OnModuleInit, OnModuleDestroy {
-  onModuleInit() {
-    console.log('telegram service init');
-  }
-  onModuleDestroy() {
-    console.log('telegram service destroy');
-  }
+export class TelegramService {
+  constructor(@InjectBot() private readonly bot: Telegraf<Context>) {}
 
   sendMessage(chatId: string, message: string) {
-    console.log(`TG[${chatId}]: ${message}`);
+    this.bot.telegram.sendMessage(chatId, message);
   }
 }

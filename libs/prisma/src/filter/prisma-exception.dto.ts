@@ -2,6 +2,7 @@ import { ArgumentsHost, Catch, HttpServer, HttpStatus } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { Prisma } from '@prisma/client';
 import { Response } from 'express';
+import { Context } from 'telegraf';
 
 export type ErrorCodesStatusMapping = {
   [key: string]: number;
@@ -58,7 +59,6 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
    */
   catch(exception: Prisma.PrismaClientKnownRequestError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
 
     if (!Object.keys(this.errorCodesStatusMapping).includes(exception.code)) {
       return super.catch(exception, host);
@@ -68,12 +68,18 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
     const message =
       `[${exception.code}]: ` + this.exceptionShortMessage(exception.message);
 
-    response.status(statusCode).send(
-      JSON.stringify({
-        statusCode,
-        message,
-      }),
-    );
+    if (host.getType() !== 'http') {
+      const telegrafCtx = ctx.getRequest<Context>();
+      telegrafCtx.reply(message);
+    } else {
+      const response = ctx.getResponse<Response>();
+      response.status(statusCode).send(
+        JSON.stringify({
+          statusCode,
+          message,
+        }),
+      );
+    }
   }
 
   /**

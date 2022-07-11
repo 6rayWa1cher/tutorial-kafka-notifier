@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TelegramModule } from '../telegram/telegram.module';
 import { SocialService } from './social.service';
 
 @Module({
-  imports: [TelegramModule],
+  imports: [forwardRef(() => TelegramModule)],
   providers: [SocialService],
   exports: [SocialService],
 })
