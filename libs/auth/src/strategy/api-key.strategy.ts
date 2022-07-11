@@ -1,4 +1,4 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { Logger, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-http-bearer';
 
@@ -6,12 +6,18 @@ export abstract class ApiKeyStrategy extends PassportStrategy(
   Strategy,
   'api-key',
 ) {
-  private tokenMap: Map<string, string>;
+  private readonly logger = new Logger(ApiKeyStrategy.name);
+  private readonly tokenMap: Map<string, string>;
 
   constructor(apiKeys: { client: string; token: string }[]) {
     super();
     this.tokenMap = new Map(
-      apiKeys.map(({ client, token }) => [token, client]),
+      apiKeys
+        .filter(({ client, token }) => token != null && client != null)
+        .map(({ client, token }) => [token, client]),
+    );
+    this.tokenMap.forEach((client) =>
+      this.logger.log(`Registered api-key for client "${client}"`),
     );
   }
 
