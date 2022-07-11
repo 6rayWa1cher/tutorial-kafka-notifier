@@ -1,7 +1,7 @@
 import { AuthService } from '@app/auth/auth.service';
-import { UserEntity } from '@app/core/user/dto';
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { UserEntity } from '../tkn-user/dto';
 import { AuthDto } from './dto';
 import { TokensDto } from './dto/tokens.dto';
 
