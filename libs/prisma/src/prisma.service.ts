@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
 
 function getUrl(config: ConfigService): string {
-  const rawUrl = config.get('DATABASE_URL');
+  const rawUrl = config.getOrThrow('DATABASE_URL');
   const interpolateRegex = /\${([\s\S]+?)}/g;
   const match = rawUrl.matchAll(interpolateRegex);
   let output: string = rawUrl;
