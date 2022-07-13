@@ -42,6 +42,7 @@
     "@nestjs/config": "^2.1.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/jwt": "^9.0.0",
+    "@nestjs/microservices": "^9.0.3",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^6.0.1",
@@ -54,6 +55,7 @@
     "class-validator": "^0.13.2",
     "express-session": "^1.17.3",
     "helmet": "^5.1.0",
+    "kafkajs": "^2.1.0",
     "lodash.template": "^4.5.0",
     "nestjs-telegraf": "^2.5.0",
     "passport": "^0.6.0",
@@ -115,7 +117,8 @@
     "moduleNameMapper": {
       "^@app/prisma(|/.*)$": "<rootDir>/libs/prisma/src/$1",
       "^@app/core(|/.*)$": "<rootDir>/libs/core/src/$1",
-      "^@app/auth(|/.*)$": "<rootDir>/libs/auth/src/$1"
+      "^@app/auth(|/.*)$": "<rootDir>/libs/auth/src/$1",
+      "^@app/shared(|/.*)$": "<rootDir>/libs/shared/src/$1"
     }
   },
   "prisma": {

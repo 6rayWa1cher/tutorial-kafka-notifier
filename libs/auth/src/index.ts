@@ -4,3 +4,4 @@ export * from './strategy';
 export * from './dto';
 export * from './guard';
 export * from './decorator';
+export * from './password-encoder.service';

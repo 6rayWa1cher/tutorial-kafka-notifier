@@ -1,16 +1,21 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { NotificationDto } from './dto';
+import {
+  Controller,
+  UseFilters,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { EventPattern, Payload } from '@nestjs/microservices';
+import { StatsMessage } from 'libs/shared/src';
+import { RpcBadRequestException } from './filter';
 import { MessageService } from './message.service';
 
-@ApiTags('message')
-@Controller('message')
+@Controller()
+@UsePipes(ValidationPipe)
+@UseFilters(RpcBadRequestException)
 export class MessageController {
-  constructor(private messageService: MessageService) {}
-
-  @Post('notify')
-  @HttpCode(HttpStatus.OK)
-  notifyHttp(@Body() dto: NotificationDto) {
-    return this.messageService.notify(dto);
+  constructor(private readonly messageService: MessageService) {}
+  @EventPattern('stats-topic')
+  statsPublished(@Payload() message: StatsMessage): Promise<void> {
+    return this.messageService.sendNotification(message);
   }
 }

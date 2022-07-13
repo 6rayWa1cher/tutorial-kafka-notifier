@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { MessageModule } from './module/message/message.module';
+import { RestModule } from './module/rest/rest.module';
 import { SocialModule } from './module/social/social.module';
 import errorMiddleware from './module/telegram/middleware/error.middleware';
 import { TelegramModule } from './module/telegram/telegram.module';
@@ -22,6 +23,7 @@ import { EspApiKeyStrategy } from './strategy';
     PrismaModule,
     TelegramModule,
     SocialModule,
+    RestModule,
     MessageModule,
   ],
   providers: [EspApiKeyStrategy],

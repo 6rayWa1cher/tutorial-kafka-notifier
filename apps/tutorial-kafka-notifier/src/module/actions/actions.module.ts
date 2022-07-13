@@ -8,6 +8,12 @@ import { ActionsController } from './actions.controller';
 import { ActionsService } from './actions.service';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import {
+  ClientProvider,
+  ClientsModule,
+  ClientsModuleOptionsFactory,
+  Transport,
+} from '@nestjs/microservices';
 
 @Injectable()
 class HttpConfigService implements HttpModuleOptionsFactory {
@@ -26,12 +32,36 @@ class HttpConfigService implements HttpModuleOptionsFactory {
   }
 }
 
+@Injectable()
+class RpcConfigService implements ClientsModuleOptionsFactory {
+  constructor(private readonly config: ConfigService) {}
+
+  createClientOptions(): ClientProvider | Promise<ClientProvider> {
+    return {
+      transport: Transport.KAFKA,
+      options: {
+        client: {
+          clientId: 'tutorial-kafka-notifier',
+          brokers: [this.config.getOrThrow('KAFKA_URL')],
+        },
+        producerOnlyMode: true,
+      },
+    };
+  }
+}
+
 @Module({
   imports: [
     ConfigModule,
     HttpModule.registerAsync({
       useClass: HttpConfigService,
     }),
+    ClientsModule.registerAsync([
+      {
+        name: 'KAFKA_SERVICE',
+        useClass: RpcConfigService,
+      },
+    ]),
   ],
   controllers: [ActionsController],
   providers: [ActionsService, HttpConfigService],

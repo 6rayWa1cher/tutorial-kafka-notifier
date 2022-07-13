@@ -9,6 +9,8 @@ import { AppModule } from './app.module';
 import helmet from 'helmet';
 import { PrismaClientExceptionFilter } from '@app/prisma/filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
+import { Transport } from '@nestjs/microservices';
 
 function setupSwagger(app: INestApplication) {
   const config = new DocumentBuilder()
@@ -36,6 +38,19 @@ async function bootstrap() {
 
   setupSwagger(app);
 
+  const config = app.get(ConfigService);
+  app.connectMicroservice({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        clientId: 'tutorial-kafka-notifier',
+        brokers: [config.getOrThrow('KAFKA_URL')],
+      },
+      producerOnlyMode: true,
+    },
+  });
+
+  await app.startAllMicroservices();
   await app.listen(8080);
 }
 bootstrap();

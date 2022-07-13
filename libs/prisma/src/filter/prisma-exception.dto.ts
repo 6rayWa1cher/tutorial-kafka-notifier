@@ -1,5 +1,12 @@
-import { ArgumentsHost, Catch, HttpServer, HttpStatus } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  HttpServer,
+  HttpStatus,
+  Logger,
+} from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
+import { KafkaRetriableException } from '@nestjs/microservices';
 import { Prisma } from '@prisma/client';
 import { Response } from 'express';
 import { Context } from 'telegraf';
@@ -13,6 +20,7 @@ export type ErrorCodesStatusMapping = {
  */
 @Catch(Prisma?.PrismaClientKnownRequestError)
 export class PrismaClientExceptionFilter extends BaseExceptionFilter {
+  private logger = new Logger(PrismaClientExceptionFilter.name);
   /**
    * default error codes mapping
    *
@@ -68,10 +76,7 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
     const message =
       `[${exception.code}]: ` + this.exceptionShortMessage(exception.message);
 
-    if (host.getType() !== 'http') {
-      const telegrafCtx = ctx.getRequest<Context>();
-      telegrafCtx.reply(message);
-    } else {
+    if (host.getType() === 'http') {
       const response = ctx.getResponse<Response>();
       response.status(statusCode).send(
         JSON.stringify({
@@ -79,6 +84,11 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
           message,
         }),
       );
+    } else if (host.getType() === 'rpc') {
+      throw new KafkaRetriableException(message);
+    } else {
+      const telegrafCtx = ctx.getRequest<Context>();
+      telegrafCtx.reply(message);
     }
   }
 

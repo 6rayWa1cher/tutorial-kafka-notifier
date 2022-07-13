@@ -4,7 +4,9 @@ import {
   INestApplication,
   ValidationPipe,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory, Reflector } from '@nestjs/core';
+import { Transport } from '@nestjs/microservices';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { TelegramNotifierModule } from './telegram-notifier.module';
@@ -35,6 +37,21 @@ async function bootstrap() {
 
   setupSwagger(app);
 
+  const config = app.get(ConfigService);
+  app.connectMicroservice({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        clientId: 'telegram-notifier',
+        brokers: [config.getOrThrow('KAFKA_URL')],
+      },
+      consumer: {
+        groupId: 'telegram-notifier-consumer',
+      },
+    },
+  });
+
+  await app.startAllMicroservices();
   await app.listen(4000);
 }
 bootstrap();
